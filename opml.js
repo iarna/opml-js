@@ -143,58 +143,59 @@ opml.Parser.prototype.onSaxOpentag = function (node) {
 opml.Parser.prototype.onSaxClosetag = function (nodeName) {
     var text = this.textBuffer.trim();
     this.textBuffer = '';
-    if ( nodeName == 'title' ) {
-        this.document.title = text;
-    }
-    else if ( nodeName == 'ownername' ) {
-        this.document.ownerName = text;
-    }
-    else if ( nodeName == 'owneremail' ) {
-        this.document.ownerEmail = text;
-    }
-    else if ( nodeName == 'ownerid' ) {
-        this.document.ownerId = text;
-    }
-    else if ( nodeName == 'docs' ) {
-        this.document.docs = text;
-    }
-    else if ( nodeName == 'expansionstate' ) {
-        this.document.expansionState = _.map(text.split(/,/),function (s) { return s.trim(); });
-    }
-    else if ( nodeName == 'vertscrollstate' ) {
-        this.document.vertScrollState = parseInt(text,10);
-    }
-    else if ( nodeName == 'windowtop' ) {
-        this.document.windowTop = parseInt(text,10);
-    }
-    else if ( nodeName == 'windowleft' ) {
-        this.document.windowLeft = parseInt(text,10);
-    }
-    else if ( nodeName == 'windowbottom' ) {
-        this.document.windowBottom = parseInt(text,10);
-    }
-    else if ( nodeName == 'windowright' ) {
-        this.document.windowRight = parseInt(text,10);
-    }
-    else if (nodeName == 'datecreated' ) {
-        this.document.dateCreated = Date.parse(text);
-    }
-    else if (nodeName == 'datemodified' ) {
-        this.document.dateModified = Date.parse(text);
-    }
-    else if (nodeName == 'head' ) {
-        this.emit('document',this.document);
-    }
-    else if (nodeName == 'outline' ) {
-        this.outlinepath.pop();
-    }
-    else if (_.contains(['opml','body'],nodeName)) {
-        // Known tags that we don't do anything with
-    }
-    else {
-        if (this.strict) {
-            this.emit('error','Strictness error, unknown tag: '+nodeName);
-        }
+    switch (nodeName) {
+        case 'title':
+            this.document.title = text;
+            break;
+        case 'ownername':
+            this.document.ownerName = text;
+            break;
+        case 'owneremail':
+            this.document.ownerEmail = text;
+            break;
+        case 'ownerid':
+            this.document.ownerId = text;
+            break;
+        case 'docs':
+            this.document.docs = text;
+            break;
+        case 'expansionstate':
+            this.document.expansionState = _.map(text.split(/,/),function (s) { return s.trim(); });
+            break;
+        case 'vertscrollstate':
+            this.document.vertScrollState = parseInt(text,10);
+            break;
+        case 'windowtop':
+            this.document.windowTop = parseInt(text,10);
+            break;
+        case 'windowleft':
+            this.document.windowLeft = parseInt(text,10);
+            break;
+        case 'windowbottom':
+            this.document.windowBottom = parseInt(text,10);
+            break;
+        case 'windowright':
+            this.document.windowRight = parseInt(text,10);
+            break;
+        case 'datecreated':
+            this.document.dateCreated = Date.parse(text);
+            break;
+        case 'datemodified':
+            this.document.dateModified = Date.parse(text);
+            break;
+        case 'head':
+            this.emit('document',this.document);
+            break;
+        case 'outline':
+            this.outlinepath.pop();
+        case 'opml':
+        case 'body':
+            // Known tags that we don't do anything with
+            break;
+        default:
+            if (this.strict) {
+                this.emit('error','Strictness error, unknown tag: '+nodeName);
+            }
     }
 };
 
