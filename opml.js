@@ -76,12 +76,12 @@ opml.Parser.prototype.initialize = function (stream,options) {
     this.outlinepath = [this.document];
     this.textBuffer = '';
     this.stream = stream.pipe( sax.createStream(this.strict, {normalize:true,lowercase:true,xmlns:true,noscript:true}) );
-    this.stream.on( 'error', this.onSaxError )
-               .on( 'opentag', this.onSaxOpentag )
-               .on( 'closetag', this.onSaxClosetag )
-               .on( 'text', this.onSaxTextOrCDATA )
-               .on( 'cdata', this.onSaxTextOrCDATA )
-               .on( 'end', this.onSaxEnd );
+    this.stream.on( 'error', this.onSaxError.bind(this) )
+               .on( 'opentag', this.onSaxOpentag.bind(this) )
+               .on( 'closetag', this.onSaxClosetag.bind(this) )
+               .on( 'text', this.onSaxTextOrCDATA.bind(this) )
+               .on( 'cdata', this.onSaxTextOrCDATA.bind(this) )
+               .on( 'end', this.onSaxEnd.bind(this) );
 };
 
 opml.Parser.prototype.onSaxError = function (e) {
@@ -209,6 +209,3 @@ opml.Parser.prototype.onSaxTextOrCDATA = function (textOrCDATA) {
 opml.Parser.prototype.onSaxEnd = function () {
     this.emit('end');
 };
-
-_.bindAll(opml.Parser.prototype);
-
