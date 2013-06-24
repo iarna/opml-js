@@ -88,7 +88,6 @@ opml.Parser.prototype.onSaxError = function (e) {
     this.emit('error',e);
 };
 
-(function(){
 var lowerMap = function (memo,value) { memo[value.toLowerCase()] = value; return memo; }
 var stringAttrs = _.reduce(['text','type','url','xmlUrl','htmlUrl','description','language','title','version'], lowerMap, {});
 var boolAttrs   = _.reduce(['isComment','isBreakpoint'], lowerMap, {});
@@ -110,9 +109,6 @@ opml.Parser.prototype.isDateAttr = function (key) {
 opml.Parser.prototype.isCatAttr = function (key) {
     return catAttrs[key];
 };
-
-
-})();
 
 opml.Parser.prototype.onSaxOpentag = function (node) {
     this.textBuffer = '';
