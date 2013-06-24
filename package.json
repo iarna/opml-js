@@ -1,0 +1,24 @@
+{
+  "name": "opml",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "sax": "*",
+    "underscore": "*"
+  },
+  "main": "opml.js",
+  "license": "BSD",
+  "scripts": {
+    "test": "node node_modules/tap/bin/tap.js test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iarna/opml-js.git"
+  },
+  "devDependencies": {
+    "tap": "~0.3.3"
+  },
+  "directories": {
+    "test": "test"
+  }
+}
