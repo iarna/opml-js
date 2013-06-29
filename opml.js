@@ -1,5 +1,5 @@
 "use strict";
-var opml = exports = module.exports = {}
+var opml = module.exports;
 
 var sax = require('sax'),
     _   = require('underscore'),
@@ -21,7 +21,7 @@ opml.parse = function (stream, options, callback) {
 };
 
 opml.Document = function () {
-    this.version         = '2.0';
+    this.version         = 2.0;
     this.title           = undefined;
     this.dateCreated     = undefined;
     this.dateModified    = undefined;
@@ -112,7 +112,12 @@ opml.Parser.prototype.isCatAttr = function (key) {
 
 opml.Parser.prototype.onSaxOpentag = function (node) {
     this.textBuffer = '';
-    if (node.name == 'outline') {
+    if (node.name == 'opml') {
+        if ( node.attributes.version ) {
+            this.document.version = parseFloat(node.attributes.version.value);
+        }
+    }
+    else if (node.name == 'outline') {
         var outline = new opml.Outline();
         outline.parent = _.last(this.outlinepath);
 
