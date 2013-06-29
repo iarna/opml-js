@@ -4,7 +4,8 @@ var opml = module.exports;
 var sax = require('sax'),
     _   = require('underscore'),
     events = require('events'),
-    util = require('util');
+    util = require('util'),
+    promise = require('node-promise');
 
 opml.parse = function (stream, options, callback) {
     var document;
@@ -13,11 +14,26 @@ opml.parse = function (stream, options, callback) {
         callback = options;
         options = null;
     }
-    return new opml.Parser( stream, options )
+    var parser = new opml.Parser( stream, options )
         .on('document',function (d) { document = d; d.outlines = [] })
         .on('outline',function (o) { o.outlines = []; o.parent.outlines.push(o); delete(o.parent) })
         .on('error',function (e) { errors.push(e) })
-        .on('end', function () { callback( errors.length ? errors : null, document ) });
+    if ( callback ) {
+        parser.on('end', function () { callback(document, errors.length? errors: null) });
+        return parser;
+    }
+    else {
+        var deferred = promise.defer();
+        parser.on('end', function () {
+            if (errors.length) {
+                deferred.reject(errors, false);
+            }
+            else {
+                deferred.resolve(document);
+            }
+        });
+        return deferred;
+    }
 };
 
 opml.Document = function () {

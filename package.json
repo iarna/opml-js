@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "sax": "*",
-    "underscore": "*"
+    "sax": "~0.5.4",
+    "underscore": "~1.4.4",
+    "node-promise": "~0.5.6"
   },
   "main": "opml.js",
   "license": "BSD",
