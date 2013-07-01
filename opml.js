@@ -104,11 +104,11 @@ opml.Parser.prototype.onSaxError = function (e) {
     this.emit('error',e);
 };
 
-var lowerMap = function (memo,value) { memo[value.toLowerCase()] = value; return memo; }
-var stringAttrs = _.reduce(['text','type','url','xmlUrl','htmlUrl','description','language','title','version'], lowerMap, {});
-var boolAttrs   = _.reduce(['isComment','isBreakpoint'], lowerMap, {});
-var dateAttrs   = _.reduce(['created'], lowerMap, {});
-var catAttrs    = _.reduce(['category'], lowerMap, {});
+var createLowerMap = function (a) { return _.object(_.map(a,function (value) { return [value.toLowerCase(), value] })) }
+var stringAttrs = createLowerMap(['text','type','url','xmlUrl','htmlUrl','description','language','title','version']);
+var boolAttrs   = createLowerMap(['isComment','isBreakpoint']);
+var dateAttrs   = createLowerMap(['created']);
+var catAttrs    = createLowerMap(['category']);
 
 opml.Parser.prototype.isStringAttr = function (key) {
     return stringAttrs[key];
