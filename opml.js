@@ -86,13 +86,13 @@ opml.Parser.prototype.initialize = function (stream,options) {
     this.document = new opml.Document();
     this.outlinepath = [this.document];
     this.textBuffer = '';
-    this.stream = stream.pipe( sax.createStream(this.strict, {normalize:true,lowercase:true,xmlns:true,noscript:true}) );
-    this.stream.on( 'error', this.onSaxError.bind(this) )
-               .on( 'opentag', this.onSaxOpentag.bind(this) )
-               .on( 'closetag', this.onSaxClosetag.bind(this) )
-               .on( 'text', this.onSaxTextOrCDATA.bind(this) )
-               .on( 'cdata', this.onSaxTextOrCDATA.bind(this) )
-               .on( 'end', this.onSaxEnd.bind(this) );
+    stream.pipe( sax.createStream(this.strict, {normalize:true,lowercase:true,xmlns:true,noscript:true}) )
+          .on( 'error', this.onSaxError.bind(this) )
+          .on( 'opentag', this.onSaxOpentag.bind(this) )
+          .on( 'closetag', this.onSaxClosetag.bind(this) )
+          .on( 'text', this.onSaxTextOrCDATA.bind(this) )
+          .on( 'cdata', this.onSaxTextOrCDATA.bind(this) )
+          .on( 'end', this.onSaxEnd.bind(this) );
 };
 
 opml.Parser.prototype.onSaxError = function (e) {
