@@ -1,5 +1,5 @@
 "use strict";
-var test = require("tap").test,
+var test = require("tape"),
     opml = require('../opml'),
     fs   = require('fs');
 
