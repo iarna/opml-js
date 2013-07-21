@@ -5,7 +5,7 @@ var sax = require('sax'),
     _   = require('underscore'),
     events = require('events'),
     util = require('util'),
-    promise = require('node-promise');
+    Continue = require('continued');
 
 opml.parse = function (stream, options, callback) {
     var document;
@@ -18,22 +18,17 @@ opml.parse = function (stream, options, callback) {
         .on('document',function (d) { document = d; d.outlines = [] })
         .on('outline',function (o) { o.outlines = []; o.parent.outlines.push(o); delete(o.parent) })
         .on('error',function (e) { errors.push(e) })
-    if ( callback ) {
-        parser.on('end', function () { callback(document, errors.length? errors: null) });
-        return parser;
-    }
-    else {
-        var deferred = promise.defer();
+
+    var C = Continue(function (resolve) {
         parser.on('end', function () {
-            if (errors.length) {
-                deferred.reject(errors, false);
+            if ( ! document ) {
+                errors.push( new Error("No OPML found") );
             }
-            else {
-                deferred.resolve(document);
-            }
+            resolve( errors.length ? errors : null, document );
         });
-        return deferred;
-    }
+    });
+    if (callback) C(callback);
+    return C;
 };
 
 opml.Document = function () {
